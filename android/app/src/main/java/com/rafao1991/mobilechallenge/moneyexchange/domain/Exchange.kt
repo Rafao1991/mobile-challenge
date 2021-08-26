@@ -13,49 +13,41 @@ class Exchange(
 
     fun getExchanged(): Double {
         if (originCurrency == USD || newCurrency == USD) {
-            return exchangeWithUSD()
+            return exchangeWithUSD(amount)
         }
 
-        return exchange()
+        return exchange(amount)
     }
 
-    private fun exchange(): Double {
-        TODO("Not yet implemented")
+    private fun exchange(amount: Double): Double {
+        return exchangeFromUSD(exchangeToUSD(amount))
     }
 
-    private fun exchangeWithUSD(): Double {
+    private fun exchangeWithUSD(amount: Double): Double {
         if (originCurrency == USD) {
-            return exchangeFromUSD()
+            return exchangeFromUSD(amount)
         }
 
-        return exchangeToUSD()
+        return exchangeToUSD(amount)
     }
 
-    private fun exchangeToUSD(): Double {
-        val key = newCurrency + originCurrency
+    private fun exchangeToUSD(amount: Double): Double {
+        val key = USD + originCurrency
 
         if (quotes.containsKey(key)) {
             val quote = quotes[key]
-            try {
-                return amount / quote!!
-            } catch (e: Exception) {
-                throw Exception(ERROR, e)
-            }
+            return amount / quote!!
         }
 
         throw Exception(ERROR)
     }
 
-    private fun exchangeFromUSD(): Double {
-        val key = originCurrency + newCurrency
+    private fun exchangeFromUSD(amount: Double): Double {
+        val key = USD + newCurrency
 
         if (quotes.containsKey(key)) {
             val quote = quotes[key]
-            try {
-                return amount * quote!!
-            } catch (e: Exception) {
-                throw Exception(ERROR, e)
-            }
+            return amount * quote!!
         }
 
         throw Exception(ERROR)

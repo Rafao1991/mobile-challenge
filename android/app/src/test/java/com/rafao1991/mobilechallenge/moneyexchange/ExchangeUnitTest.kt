@@ -1,10 +1,13 @@
 package com.rafao1991.mobilechallenge.moneyexchange
 
+import com.rafao1991.mobilechallenge.moneyexchange.domain.ERROR
 import com.rafao1991.mobilechallenge.moneyexchange.domain.Exchange
+import com.rafao1991.mobilechallenge.moneyexchange.domain.USD
 import org.junit.Test
 
 import org.junit.Assert.*
 import org.junit.Before
+import java.lang.Exception
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -18,6 +21,7 @@ class ExchangeUnitTest {
     private val brl = "BRL"
     private val gbp = "GBP"
     private val kgs = "KGS"
+    private val xxx = "XXX"
 
     private val amount = 100.00
     private val delta = 0.0000000001
@@ -65,5 +69,60 @@ class ExchangeUnitTest {
     fun exchange_KGSUSD() {
         exchange = Exchange(amount, kgs, usd, quotes)
         assertEquals(exchange.getExchanged(), 1.179310103353676, delta)
+    }
+
+    @Test
+    fun exchange_BRLGBP() {
+        exchange = Exchange(amount, brl, gbp, quotes)
+        assertEquals(exchange.getExchanged(), 13.40710612279964, delta)
+    }
+
+    @Test
+    fun exchange_GBPBRL() {
+        exchange = Exchange(amount, gbp, brl, quotes)
+        assertEquals(exchange.getExchanged(), 745.8731144817571, delta)
+    }
+
+    @Test
+    fun exchange_BRLKGS() {
+        exchange = Exchange(amount, brl, kgs, quotes)
+        assertEquals(exchange.getExchanged(), 1587.09521466362, delta)
+    }
+
+    @Test
+    fun exchange_KGSBRL() {
+        exchange = Exchange(amount, kgs, brl, quotes)
+        assertEquals(exchange.getExchanged(), 6.300819199508123, delta)
+    }
+
+    @Test
+    fun exchange_GBPKGS() {
+        exchange = Exchange(amount, gbp, kgs, quotes)
+        assertEquals(exchange.getExchanged(), 11837.71650740247, delta)
+    }
+
+    @Test
+    fun exchange_KGSGBP() {
+        exchange = Exchange(amount, kgs, gbp, quotes)
+        assertEquals(exchange.getExchanged(), 0.8447575166837884, delta)
+    }
+
+    @Test
+    fun exchange_error() {
+        assertThrows(Exception::class.java) {
+            exchange = Exchange(amount, xxx, gbp, quotes)
+            exchange.getExchanged()
+        }
+
+        assertThrows(Exception::class.java) {
+            exchange = Exchange(amount, usd, xxx, quotes)
+            exchange.getExchanged()
+        }
+    }
+
+    @Test
+    fun assert_constants() {
+        assertEquals(ERROR, "Something went wrong during the currency exchange operation.")
+        assertEquals(USD, "USD")
     }
 }
