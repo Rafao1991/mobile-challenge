@@ -1,5 +1,3 @@
-import java.net.InetAddress.getByName
-
 plugins {
     id("com.android.application")
     id("kotlin-android")
