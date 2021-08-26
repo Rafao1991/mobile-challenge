@@ -2,9 +2,6 @@ package com.rafao1991.mobilechallenge.moneyexchange.domain
 
 import java.lang.Exception
 
-const val ERROR = "Something went wrong during the currency exchange operation."
-const val USD = "USD"
-
 class Exchange(
     private val amount: Double,
     private val originCurrency: String,

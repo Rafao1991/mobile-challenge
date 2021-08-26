@@ -1,19 +1,13 @@
 package com.rafao1991.mobilechallenge.moneyexchange
 
-import com.rafao1991.mobilechallenge.moneyexchange.domain.ERROR
 import com.rafao1991.mobilechallenge.moneyexchange.domain.Exchange
-import com.rafao1991.mobilechallenge.moneyexchange.domain.USD
 import org.junit.Test
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
 import org.junit.Before
 import java.lang.Exception
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
 class ExchangeUnitTest {
     lateinit var exchange: Exchange
 
@@ -118,11 +112,5 @@ class ExchangeUnitTest {
             exchange = Exchange(amount, usd, xxx, quotes)
             exchange.getExchanged()
         }
-    }
-
-    @Test
-    fun assert_constants() {
-        assertEquals(ERROR, "Something went wrong during the currency exchange operation.")
-        assertEquals(USD, "USD")
     }
 }
