@@ -24,6 +24,6 @@ jobs:
       working-directory: android/
       run: chmod +x gradlew
     - name: Build with Gradle
-      run: gradlew assemble
+      run: .gradlew assemble
     - name: Run unit tests
-      run: gradlew test
+      run: .gradlew test
