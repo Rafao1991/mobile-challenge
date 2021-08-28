@@ -25,11 +25,11 @@ class MainViewModel : ViewModel() {
     val status: LiveData<ApiStatus>
         get() = _status
 
-    private val _currencyList = MutableLiveData<CurrencyList>()
-    val currencyList: LiveData<CurrencyList>
+    private val _currencyList = MutableLiveData<CurrencyList?>()
+    val currencyList: LiveData<CurrencyList?>
         get() = _currencyList
 
-    private val _currencyLiveQuotes = MutableLiveData<CurrencyLiveQuotes>()
+    private val _currencyLiveQuotes = MutableLiveData<CurrencyLiveQuotes?>()
 
     private val _originCurrency = MutableLiveData<String>()
     val originCurrency: LiveData<String>
