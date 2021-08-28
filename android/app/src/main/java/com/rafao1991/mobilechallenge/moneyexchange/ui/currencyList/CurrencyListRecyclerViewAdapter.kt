@@ -9,7 +9,7 @@ import com.rafao1991.mobilechallenge.moneyexchange.databinding.FragmentCurrencyL
 import com.rafao1991.mobilechallenge.moneyexchange.domain.Currency
 
 class CurrencyListRecyclerViewAdapter(
-    private val values: Map<String, String>,
+    var values: Map<String, String>,
     private val currency: Currency,
     private val onClickListener: OnClickListener
 ) : RecyclerView.Adapter<CurrencyListRecyclerViewAdapter.ViewHolder>() {

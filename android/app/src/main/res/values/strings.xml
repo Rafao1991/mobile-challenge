@@ -4,4 +4,6 @@
     <string name="error_message">Something went wrong, please try again later.</string>
     <string name="loading_message">We are loading your content, please wait…</string>
     <string name="to">to</string>
+    <string name="asc">ascending</string>
+    <string name="desc">descending</string>
 </resources>

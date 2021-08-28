@@ -8,11 +8,13 @@ import com.rafao1991.mobilechallenge.moneyexchange.data.CurrencyApi
 import com.rafao1991.mobilechallenge.moneyexchange.data.CurrencyList
 import com.rafao1991.mobilechallenge.moneyexchange.data.CurrencyLiveQuotes
 import com.rafao1991.mobilechallenge.moneyexchange.domain.*
+import com.rafao1991.mobilechallenge.moneyexchange.domain.Currency
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import retrofit2.await
+import java.util.*
 
 class MainViewModel : ViewModel() {
 
@@ -115,6 +117,14 @@ class MainViewModel : ViewModel() {
                 getOriginCurrencyKey(),
                 getTargetCurrencyKey(),
                 _currencyLiveQuotes.value?.quotes!!).getExchanged()
+        }
+    }
+
+    fun sort(asc: Boolean): SortedMap<String, String>? {
+        return if (asc) {
+            _currencyList.value?.currencies?.toSortedMap()
+        } else {
+            _currencyList.value?.currencies?.toSortedMap(reverseOrder())
         }
     }
 }
