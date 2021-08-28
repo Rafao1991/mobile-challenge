@@ -16,20 +16,18 @@ import retrofit2.await
 
 class MainViewModel : ViewModel() {
 
-    companion object {
-
-    }
-
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+
+    private val _status = MutableLiveData<ApiStatus>()
+    val status: LiveData<ApiStatus>
+        get() = _status
 
     private val _currencyList = MutableLiveData<CurrencyList>()
     val currencyList: LiveData<CurrencyList>
         get() = _currencyList
 
     private val _currencyLiveQuotes = MutableLiveData<CurrencyLiveQuotes>()
-    val currencyLiveQuotes: LiveData<CurrencyLiveQuotes>
-        get() = _currencyLiveQuotes
 
     private val _originCurrency = MutableLiveData<String>()
     val originCurrency: LiveData<String>
@@ -45,19 +43,40 @@ class MainViewModel : ViewModel() {
 
     init {
         getDataFromApis()
-        _originCurrency.value = USD_TEXT
-        _targetCurrency.value = BRL_TEXT
     }
 
     private fun getDataFromApis() {
         coroutineScope.launch {
             try {
+                _status.value = ApiStatus.LOADING
                 _currencyList.value = CurrencyApi.service.getList().await()
                 _currencyLiveQuotes.value = CurrencyApi.service.getLiveQuotes().await()
+                if (validateResponse()) {
+                    setStartCurrency()
+                    _status.value = ApiStatus.DONE
+                } else {
+                    _status.value = ApiStatus.ERROR
+                }
             } catch (e: Exception) {
-                Log.e(javaClass.name, e.message, e)
+                _currencyList.value = CurrencyList(false, mapOf())
+                _currencyLiveQuotes.value = CurrencyLiveQuotes(false, mapOf())
+                _status.value = ApiStatus.ERROR
             }
         }
+    }
+
+    private fun setStartCurrency() {
+        _currencyList.value?.let {
+            _originCurrency.value = it.currencies[USD]
+            _targetCurrency.value = it.currencies[BRL]
+        }
+    }
+
+    private fun validateResponse(): Boolean {
+        return _currencyList.value != null &&
+                _currencyList.value!!.success &&
+                _currencyLiveQuotes.value != null &&
+                _currencyLiveQuotes.value!!.success
     }
 
     fun setCurrency(currencyType: Currency, item: String) {
@@ -67,7 +86,7 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun getOriginCurrencyKey(): String {
+    private fun getOriginCurrencyKey(): String {
         _currencyList.value?.currencies?.forEach {
             if (it.value == _originCurrency.value) {
                 return it.key
@@ -77,7 +96,7 @@ class MainViewModel : ViewModel() {
         return USD
     }
 
-    fun getTargetCurrencyKey(): String {
+    private fun getTargetCurrencyKey(): String {
         _currencyList.value?.currencies?.forEach {
             if (it.value == _targetCurrency.value) {
                 return it.key
