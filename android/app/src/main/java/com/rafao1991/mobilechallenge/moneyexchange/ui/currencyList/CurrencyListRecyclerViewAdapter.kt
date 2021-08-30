@@ -7,7 +7,7 @@ import android.widget.Filter
 import android.widget.TextView
 
 import com.rafao1991.mobilechallenge.moneyexchange.databinding.FragmentCurrencyListBinding
-import com.rafao1991.mobilechallenge.moneyexchange.domain.Currency
+import com.rafao1991.mobilechallenge.moneyexchange.util.Currency
 import java.util.*
 import kotlin.collections.HashMap
 
