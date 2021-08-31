@@ -4,10 +4,17 @@ import com.rafao1991.mobilechallenge.moneyexchange.data.local.dao.CurrencyDAO
 import com.rafao1991.mobilechallenge.moneyexchange.data.local.entity.CurrencyEntity
 import com.rafao1991.mobilechallenge.moneyexchange.data.remote.CurrencyApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 class CurrencyRepository(private val currencyDAO: CurrencyDAO) {
     private val api = CurrencyApi.service
+
+    fun getCurrenciesFromRemote(): Flow<Map<String, String>> {
+        return flow {
+            getFromApi()
+        }
+    }
 
     fun getCurrencies(): Flow<Map<String, String>> {
         return currencyDAO.getCurrencies().map {

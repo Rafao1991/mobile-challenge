@@ -9,7 +9,6 @@ const val BRL = "BRL"
 const val EXCHANGE_DATABASE = "exchange_database"
 const val CURRENCY = "currency"
 const val QUOTE = "quote"
-const val ID = "id"
 const val EXCHANGE_DATABASE_VERSION = 1
 
 enum class Currency {

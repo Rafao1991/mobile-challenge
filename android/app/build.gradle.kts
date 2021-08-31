@@ -61,6 +61,7 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
     implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
     implementation("androidx.fragment:fragment-ktx:1.3.6")
+    implementation("androidx.work:work-runtime-ktx:2.5.0")
 
     // Room components
     implementation("androidx.room:room-ktx:2.3.0")
@@ -71,11 +72,11 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
     implementation("com.squareup.moshi:moshi-adapters:1.12.0")
     implementation("com.squareup.moshi:moshi-kotlin:1.9.3")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.2.1")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.7.2")
 
     // Coroutines
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2")
 
     testImplementation("junit:junit:4.13.2")
 

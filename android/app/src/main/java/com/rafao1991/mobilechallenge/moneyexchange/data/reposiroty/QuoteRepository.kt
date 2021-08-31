@@ -1,14 +1,20 @@
 package com.rafao1991.mobilechallenge.moneyexchange.data.reposiroty
 
-import com.rafao1991.mobilechallenge.moneyexchange.data.local.dao.CurrencyDAO
 import com.rafao1991.mobilechallenge.moneyexchange.data.local.dao.QuoteDAO
 import com.rafao1991.mobilechallenge.moneyexchange.data.local.entity.QuoteEntity
 import com.rafao1991.mobilechallenge.moneyexchange.data.remote.CurrencyApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 class QuoteRepository(private val quoteDAO: QuoteDAO) {
     private val api = CurrencyApi.service
+
+    fun getQuotesFromRemote(): Flow<Map<String, Double>> {
+        return flow {
+            getFromApi()
+        }
+    }
 
     fun getQuotes(): Flow<Map<String, Double>> {
         return quoteDAO.getQuotes().map {

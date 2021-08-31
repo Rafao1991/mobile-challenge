@@ -47,11 +47,11 @@ class MainViewModel(
         get() = _result
 
     init {
-        getDataFromApis()
+        _status.value = ApiStatus.LOADING
         _result.value = 0.0
     }
 
-    private fun getDataFromApis() {
+    fun getData() {
         coroutineScope.launch {
             currencyRepository.getCurrencies()
                 .onStart { _status.value = ApiStatus.LOADING }
@@ -61,7 +61,10 @@ class MainViewModel(
                     e.printStackTrace()
                 }.collect {
                     _currencyList.value = it
-                    setStartCurrency()
+                    if (_originCurrency.value.isNullOrBlank()
+                        || _targetCurrency.value.isNullOrBlank()) {
+                            setStartCurrency()
+                    }
                     _status.value = ApiStatus.DONE
                 }
         }
@@ -122,5 +125,9 @@ class MainViewModel(
                     }
             }
         }
+    }
+
+    fun showLoading() {
+        _status.value = ApiStatus.LOADING
     }
 }

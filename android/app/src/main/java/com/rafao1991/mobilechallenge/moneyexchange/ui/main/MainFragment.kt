@@ -14,12 +14,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.rafao1991.mobilechallenge.moneyexchange.ExchangeApplication
 import com.rafao1991.mobilechallenge.moneyexchange.R
 import com.rafao1991.mobilechallenge.moneyexchange.util.ApiStatus
 import com.rafao1991.mobilechallenge.moneyexchange.util.Currency
 import com.rafao1991.mobilechallenge.moneyexchange.viewmodel.MainViewModel
 import com.rafao1991.mobilechallenge.moneyexchange.viewmodel.MainViewModelFactory
+import com.rafao1991.mobilechallenge.moneyexchange.worker.TAG
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
@@ -128,5 +131,19 @@ class MainFragment : Fragment() {
             df.roundingMode = RoundingMode.CEILING
             textViewResult.text = df.format(it)
         })
+
+        WorkManager.getInstance(requireContext()).getWorkInfosByTagLiveData(TAG).observe(
+            viewLifecycleOwner, { workInfo ->
+                if (workInfo.isNotEmpty()) {
+                    if (workInfo != null && workInfo[0].state == WorkInfo.State.RUNNING) {
+                        viewModel.showLoading()
+                    }
+
+                    if (workInfo != null && workInfo[0].state == WorkInfo.State.ENQUEUED) {
+                        viewModel.getData()
+                    }
+                }
+            }
+        )
     }
 }
