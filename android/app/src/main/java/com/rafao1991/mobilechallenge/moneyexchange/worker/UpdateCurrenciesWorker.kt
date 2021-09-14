@@ -1,7 +1,6 @@
 package com.rafao1991.mobilechallenge.moneyexchange.worker
 
 import android.content.Context
-import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.rafao1991.mobilechallenge.moneyexchange.ExchangeApplication
@@ -20,7 +19,6 @@ class UpdateCurrenciesWorker(
             context.quoteRepository.getQuotesFromRemote()
             Result.success()
         } catch (throwable: Throwable) {
-            Log.e(TAG, "Error applying blur")
             Result.failure()
         }
     }

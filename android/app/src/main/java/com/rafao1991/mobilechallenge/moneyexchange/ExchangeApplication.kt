@@ -11,7 +11,9 @@ import java.util.concurrent.TimeUnit
 
 class ExchangeApplication: Application() {
     private val database by lazy { ExchangeRoomDatabase.getInstance(this) }
-    val currencyRepository by lazy { CurrencyRepository(database.currencyDAO()) }
+    val currencyRepository by lazy {
+        CurrencyRepository(database.currencyDAO(), database.selectedCurrencyDAO())
+    }
     val quoteRepository by lazy { QuoteRepository(database.quoteDAO()) }
 
     override fun onCreate() {
@@ -21,17 +23,10 @@ class ExchangeApplication: Application() {
         val flexTimeInterval: Long = 10
         val backoffDelay: Long = 30
 
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .setRequiresBatteryNotLow(true)
-            .build()
-
         val periodicWorkRequest = PeriodicWorkRequestBuilder<UpdateCurrenciesWorker>(
-            repeatInterval, TimeUnit.MINUTES, flexTimeInterval, TimeUnit.MINUTES
+            repeatInterval, TimeUnit.SECONDS, flexTimeInterval, TimeUnit.SECONDS
         ).setBackoffCriteria(
             BackoffPolicy.EXPONENTIAL, backoffDelay, TimeUnit.SECONDS
-        ).setConstraints(
-            constraints
         ).addTag(
             TAG
         ).build()
@@ -40,7 +35,7 @@ class ExchangeApplication: Application() {
             .getInstance(this)
             .enqueueUniquePeriodicWork(
                 TAG,
-                ExistingPeriodicWorkPolicy.REPLACE,
+                ExistingPeriodicWorkPolicy.KEEP,
                 periodicWorkRequest
             )
     }

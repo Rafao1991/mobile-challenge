@@ -119,11 +119,15 @@ class MainFragment : Fragment() {
         })
 
         viewModel.originCurrency.observe(viewLifecycleOwner, {
-            buttonOriginCurrency.text = it
+            if (!it.isNullOrBlank()) {
+                buttonOriginCurrency.text = it
+            }
         })
 
         viewModel.targetCurrency.observe(viewLifecycleOwner, {
-            buttonTargetCurrency.text = it
+            if (!it.isNullOrBlank()) {
+                buttonTargetCurrency.text = it
+            }
         })
 
         viewModel.result.observe(viewLifecycleOwner, {

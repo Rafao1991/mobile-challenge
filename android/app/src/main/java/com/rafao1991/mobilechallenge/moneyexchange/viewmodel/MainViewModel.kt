@@ -49,6 +49,7 @@ class MainViewModel(
     init {
         _status.value = ApiStatus.LOADING
         _result.value = 0.0
+        setStartCurrency()
     }
 
     fun getData() {
@@ -61,19 +62,15 @@ class MainViewModel(
                     e.printStackTrace()
                 }.collect {
                     _currencyList.value = it
-                    if (_originCurrency.value.isNullOrBlank()
-                        || _targetCurrency.value.isNullOrBlank()) {
-                            setStartCurrency()
-                    }
                     _status.value = ApiStatus.DONE
                 }
         }
     }
 
     private fun setStartCurrency() {
-        _currencyList.value?.let {
-            _originCurrency.value = it[USD]
-            _targetCurrency.value = it[BRL]
+        coroutineScope.launch {
+            _originCurrency.value = currencyRepository.getSelectedCurrency(Currency.ORIGIN)
+            _targetCurrency.value = currencyRepository.getSelectedCurrency(Currency.TARGET)
         }
     }
 
@@ -81,6 +78,11 @@ class MainViewModel(
         when(currencyType) {
             Currency.ORIGIN -> _originCurrency.value = _currencyList.value?.get(item)
             Currency.TARGET -> _targetCurrency.value = _currencyList.value?.get(item)
+        }
+        coroutineScope.launch {
+            _currencyList.value?.get(item)?.let {
+                currencyRepository.setSelectedCurrency(item, currencyType, it)
+            }
         }
     }
 
@@ -105,7 +107,9 @@ class MainViewModel(
     }
 
     fun handleExchange(amount: String?) {
-        if (amount.isNullOrBlank()) {
+        if (amount.isNullOrBlank() ||
+            _originCurrency.value.isNullOrBlank() ||
+            _targetCurrency.value.isNullOrBlank()) {
             _result.value = 0.0
         } else {
             coroutineScope.launch {
